@@ -2,15 +2,19 @@
 /* eslint no-unused-vars: off */
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
-export type Channels = 'ipc-example';
+export type Channels = 'upload-file' | 'save-file' | 'run-exec';
+type ReadFileType = {
+  success: boolean
+  data: string
+}
 
 const electronHandler = {
   ipcRenderer: {
     sendMessage(channel: Channels, ...args: unknown[]) {
       ipcRenderer.send(channel, ...args);
     },
-    on(channel: Channels, func: (...args: unknown[]) => void) {
-      const subscription = (_event: IpcRendererEvent, ...args: unknown[]) =>
+    on(channel: Channels, func: (...args: ReadFileType[]) => void) {
+      const subscription = (_event: IpcRendererEvent, ...args: ReadFileType[]) =>
         func(...args);
       ipcRenderer.on(channel, subscription);
 
@@ -21,6 +25,15 @@ const electronHandler = {
     once(channel: Channels, func: (...args: unknown[]) => void) {
       ipcRenderer.once(channel, (_event, ...args) => func(...args));
     },
+    sendFilePath(channel:Channels, ...args: unknown[]){
+      ipcRenderer.send(channel, ...args);
+    },
+    sendFileData(channel:Channels, ...args: unknown[]){
+      ipcRenderer.send(channel, ...args);
+    },
+    sendExecCommand(channel: Channels, ...args: unknown[]){
+      ipcRenderer.send(channel, ...args);
+    }
   },
 };
 

@@ -1,50 +1,21 @@
-import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
-import icon from '../../assets/icon.svg';
-import './App.css';
+import { Layout } from 'antd';
+import { AppRouters } from '../routers';
+import DriverFooter from '../components/DriverFooter/DriverFooter';
+import './App.css'
+import { Provider } from "react-redux";
+import store from "../store";
+const { Content } = Layout
 
-function Hello() {
-  return (
-    <div>
-      <div className="Hello">
-        <img width="200" alt="icon" src={icon} />
-      </div>
-      <h1>electron-react-boilerplate</h1>
-      <div className="Hello">
-        <a
-          href="https://electron-react-boilerplate.js.org/"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button type="button">
-            <span role="img" aria-label="books">
-              📚
-            </span>
-            Read our docs
-          </button>
-        </a>
-        <a
-          href="https://github.com/sponsors/electron-react-boilerplate"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button type="button">
-            <span role="img" aria-label="folded hands">
-              🙏
-            </span>
-            Donate
-          </button>
-        </a>
-      </div>
-    </div>
-  );
-}
 
 export default function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Hello />} />
-      </Routes>
-    </Router>
+    <Provider store={store}>
+      <Layout className='LDE_driver_layout'>
+        <Content className='LDE_driver_content'>
+          <AppRouters />
+        </Content>
+        <DriverFooter />
+      </Layout>
+    </Provider>
   );
 }

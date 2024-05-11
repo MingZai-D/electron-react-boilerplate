@@ -1,0 +1,17 @@
+.driver_footer{
+  height: 70px;
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .driver_footer_left{
+    .driver_footer_tip{
+      color: #000;
+      margin-bottom: 10px;
+    }
+    .driver_footer_icon{
+      display: flex;
+    }
+  }
+}

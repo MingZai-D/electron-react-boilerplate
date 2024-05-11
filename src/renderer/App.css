@@ -6,6 +6,7 @@ body {
   position: relative;
   color: white;
   height: 100vh;
+  margin: 0;
   background: linear-gradient(
     200.96deg,
     #fedc2a -29.09%,
@@ -59,4 +60,16 @@ a:hover {
   justify-content: center;
   align-items: center;
   margin: 20px 0;
+}
+
+.LDE_driver_layout{
+  height: 100vh;
+}
+
+.LDE_driver_content{
+  flex: 1
+}
+
+.ant-form-item-required::before{
+  display: none !important;
 }

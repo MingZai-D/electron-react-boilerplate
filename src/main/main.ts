@@ -9,11 +9,14 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow, shell, ipcMain } from 'electron';
+import fs from 'fs'
+import { app, BrowserWindow, shell, ipcMain, dialog } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+import { ExecOptions, exec } from 'child_process';
+
 
 class AppUpdater {
   constructor() {
@@ -25,11 +28,44 @@ class AppUpdater {
 
 let mainWindow: BrowserWindow | null = null;
 
-ipcMain.on('ipc-example', async (event, arg) => {
-  const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
-  console.log(msgTemplate(arg));
-  event.reply('ipc-example', msgTemplate('pong'));
+function executeCommand(command: string, options: ExecOptions): Promise<{stdout: string, stderr: string}> {
+  return new Promise((resolve, reject) => {
+    exec(command, options, (error, stdout, stderr) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve({ stdout, stderr });
+      }
+    });
+  });
+}
+
+ipcMain.on('upload-file', async (event, filePath) => {
+  fs.readFile(filePath, 'utf8', (err, data) => {
+    event.reply('upload-file', {
+      success: !err,
+      data
+    })
+  });
 });
+
+ipcMain.on('run-exec', async (event, command) =>{
+  const exePath = path.resolve('./')
+  try{
+    const { stdout } = await executeCommand(command, {
+      cwd: exePath + "\\nodeMapping"
+    })
+    event.reply('run-exec', {
+      success: true,
+      data: stdout
+    })
+  }catch(err){
+    event.reply('run-exec', {
+      success: false,
+      data: err
+    })
+  }
+})
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -72,16 +108,41 @@ const createWindow = async () => {
   mainWindow = new BrowserWindow({
     show: false,
     width: 1024,
-    height: 728,
+    height: 750,
     icon: getAssetPath('icon.png'),
     webPreferences: {
+      // 开启node
+      nodeIntegration: true,
+      // 取消上下文隔离
+      // contextIsolation: false,
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')
         : path.join(__dirname, '../../.erb/dll/preload.js'),
     },
   });
 
+  ipcMain.on('save-file', async (event, fileData) => {
+    dialog.showSaveDialog(mainWindow as any, {
+      title: 'Save File',
+      defaultPath: path.join(app.getPath('documents'), 'text-config.config')
+    }).then(result => {
+      if (!result.canceled) {
+        // 写入文件
+        fs.writeFileSync(result.filePath as string, fileData);
+        event.reply('save-file', {
+          success: true,
+          data: result.filePath
+        });
+      }
+    }).catch(err => {
+      console.log(err);
+    });
+  });
+
+
+
   mainWindow.loadURL(resolveHtmlPath('index.html'));
+
 
   mainWindow.on('ready-to-show', () => {
     if (!mainWindow) {
@@ -128,6 +189,7 @@ app
   .whenReady()
   .then(() => {
     createWindow();
+    
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the
       // dock icon is clicked and there are no other windows open.
