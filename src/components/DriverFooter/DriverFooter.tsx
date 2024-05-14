@@ -1,10 +1,13 @@
 import React from "react";
 import { Button, Layout } from "antd";
 import { FacebookOutlined, TwitterOutlined, InstagramOutlined} from "@ant-design/icons"
+import { writeNfcData } from '../../../nodeMapping/mapping'
 import './DriverFooter.scss'
+import { useDriverConfig } from "../../store/reducer";
 const { Footer } = Layout
 
 const DriverFooter = () =>{
+  const [driverConfig] = useDriverConfig()
   return (
     <Footer className="driver_footer">
       <div className="driver_footer_left">
@@ -15,7 +18,9 @@ const DriverFooter = () =>{
           <InstagramOutlined />
         </div>
       </div>
-      <Button>Switch to  Dark Mode</Button>
+      <Button onClick={() =>{
+        writeNfcData(driverConfig)
+      }}>Switch to  Dark Mode</Button>
     </Footer>
   )
 }

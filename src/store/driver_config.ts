@@ -164,3 +164,16 @@ export const defDriverConfig = {
 export type DriverConfigType = typeof defDriverConfig
 
 export type MappingKeyType = keyof typeof defDriverConfig.Mappings
+
+export interface MappingItem {
+  name: string 
+  position: string 
+  value: string | number 
+  length: number
+  type: string 
+  disabled?: boolean
+  min?: number 
+  max?: number 
+  unit?: string 
+  coefficient?: number
+}
