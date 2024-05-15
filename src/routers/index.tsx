@@ -16,8 +16,8 @@ export const AppRouters = () =>{
   return (
     <Router>
       <Routes>
-        <Route path='/' element={<ProgrammerPage />}/>
-        {/* <Route path='/' element={<Login />}/> */}
+        {/* <Route path='/' element={<ProgrammerPage />}/> */}
+        <Route path='/' element={<Login />}/>
         <Route path={RouterKey.login} element={<Login />}/>
         <Route path={RouterKey.select_driver} element={<SelectDriver />}/>
         <Route path={RouterKey.driver_page} element={<DriverPage />} />

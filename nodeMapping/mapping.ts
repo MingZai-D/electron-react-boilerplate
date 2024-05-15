@@ -1,5 +1,7 @@
 import { DriverConfigType, MappingItem } from '../src/store/driver_config'
 import { hex2Int } from '../src/utils'
+// import { exec } from 'child_process';
+// import path from 'path';
 
 // const {
 //   exec,
@@ -111,17 +113,17 @@ export const readConfiguration = (configTags:string[]) => {
   
 }
 
-// function executeCommand(command, options) {
-//   return new Promise((resolve, reject) => {
-//     exec(command, options, (error, stdout, stderr) => {
-//       if (error) {
-//         reject(error);
-//       } else {
-//         resolve({ stdout, stderr });
-//       }
-//     });
-//   });
-// }
+function executeCommand(command:string, options: Record<any, any>) {
+  return new Promise((resolve, reject) => {
+    exec(command, options, (error, stdout, stderr) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve({ stdout, stderr });
+      }
+    });
+  });
+}
 
 export const readNFCAll = async() => {
   window.electron.ipcRenderer.sendExecCommand('run-exec', 'callNFC.exe 000025')
@@ -155,7 +157,7 @@ interface DriverGroup {
   [key: number]: MappingItem[]
 }
 
-export const writeNfcData = (driverConfig: DriverConfigType) =>{
+export const getDriverFormatData = (driverConfig: DriverConfigType) =>{
   const driverTypeHex = '00' + driverConfig.DriverType
   const driverMapping = Object.values(driverConfig.Mappings).flat()
   const driverGroup:DriverGroup  = {}
@@ -185,4 +187,14 @@ export const writeNfcData = (driverConfig: DriverConfigType) =>{
     return result
   })
   return [driverTypeHex, ...mapping]
+}
+
+export const writeNfcData = async (driverData: string) =>{
+  const exePath = path.resolve('./')
+  const command = 'callNFC_EU.exe' + driverData
+  const option = {
+    cwd: exePath + "\\nodeMapping"
+  }
+  const res = await executeCommand(command, option)
+  console.log(res, '< --- res')
 }
