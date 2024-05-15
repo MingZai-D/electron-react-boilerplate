@@ -6,7 +6,7 @@ import { Button, Descriptions, Upload } from 'antd'
 import type { DescriptionsProps } from 'antd';
 import { useReactive } from "ahooks";
 import { getDriverProgrammingInfo } from "../../utils";
-import { readConfiguration, writeNfcData } from "../../../nodeMapping/mapping";
+import { writeNfcData } from "../../../nodeMapping/mapping";
 import { delay } from 'lodash'
 const { Dragger } = Upload
 
@@ -72,30 +72,16 @@ const ProgrammerPage = () =>{
     if(state.continueLoop) return 
     const res = await writeNfcData(fileData)
     if(res.success){
-      state.configurationInfo = getDriverProgrammingInfo({ type : 'programming'})
-      // readConfiguration(fileData).then((res) => {
-      //   if (res?.status === 0) {
-      //     // state.driverType = modeList[parseInt(res?.driverInfo?.type, 16)]?.modelName
-      //     state.success += 1
-      //     state.configurationInfo = getDriverProgrammingInfo({ type: 'success' })
-      //   } else if (res?.status === 404) {
-      //     // state.configurationInfo = getDriverProgrammingInfo({ type: 'wrong', driverName: modeList['1'].modelName })
-      //   } else {
-      //     state.unSuccess += 1
-      //     state.configurationInfo = getDriverProgrammingInfo({ type: 'failed' })
-      //   }
-      //   delay(() => {
-      //     loopProgram(fileData)
-      //   }, state.delay)
-
-      // }).catch(() => {
-      //   state.unSuccess += 1
-      //   delay(() => {
-      //     loopProgram(fileData)
-      //     state.configurationInfo = getDriverProgrammingInfo({ type: 'failed' })
-      //   }, state.delay)
-      // })
+      state.success += 1
+      state.configurationInfo = getDriverProgrammingInfo({ type: 'success' })
+    }else{
+      state.unSuccess += 1
+      state.configurationInfo = getDriverProgrammingInfo({ type: 'failed' })
     }
+    delay(() => {
+      state.configurationInfo = getDriverProgrammingInfo({ type : 'programming'})
+      loopProgram(fileData)
+    }, state.delay)
   }
 
   return (

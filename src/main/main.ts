@@ -27,9 +27,9 @@ class AppUpdater {
 }
 
 let mainWindow: BrowserWindow | null = null;
-type VersionType = 'configurator' | 'programmer'
-let version:VersionType = 'configurator'
-console.log(JSON.stringify(process.argv), '< --- argv')
+export type VersionType = 'product' | 'factory'
+let version:VersionType = 'product'
+
 function executeCommand(command: string, options: ExecOptions): Promise<{stdout: string, stderr: string}> {
   return new Promise((resolve, reject) => {
     exec(command, options, (error, stdout, stderr) => {
@@ -69,6 +69,11 @@ ipcMain.on('run-exec', async (event, command) =>{
   }
 })
 
+ipcMain.once('message', async (event) => {
+  event.reply('message', process.env.VERSION || version)
+});
+
+
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
   sourceMapSupport.install();
@@ -93,7 +98,7 @@ const installExtensions = async () => {
     )
     .catch(console.log);
 };
-console.log(process)
+
 const createWindow = async () => {
   if (isDebug) {
     await installExtensions();
