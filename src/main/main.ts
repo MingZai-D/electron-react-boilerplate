@@ -51,18 +51,20 @@ ipcMain.on('upload-file', async (event, filePath) => {
 
 ipcMain.on('run-exec', async (event, command) =>{
   const exePath = path.resolve('./')
+  console.log(exePath + "\\nodeMapping", '< --- exePath')
   try{
-    const { stdout } = await executeCommand(command, {
+    const { stdout, stderr } = await executeCommand(command, {
       cwd: exePath + "\\nodeMapping"
     })
+    console.log(stderr, '< --- sterr')
     event.reply('run-exec', {
       success: true,
-      data: stdout
-    })
-  }catch(err){
+      data: stdout  
+    })  
+  }catch(err){ 
     event.reply('run-exec', {
       success: false,
-      data: err
+      data: err 
     })
   }
 })
@@ -107,9 +109,10 @@ const createWindow = async () => {
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1024,
+    width: 1024, 
     height: 750,
-    icon: getAssetPath('icon.png'),
+    icon: getAssetPath('logo.png'),
+    autoHideMenuBar: true,
     webPreferences: {
       // 开启node
       nodeIntegration: true,

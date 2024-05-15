@@ -20,8 +20,8 @@ const DriverFooter = () =>{
       </div>
       <Button onClick={async () =>{
         const data = getDriverFormatData(driverConfig).join(' ')
-        console.log(data, '< --- data')
-        await writeNfcData(data)
+        const res = await writeNfcData(data)
+        console.log(res, '< --- res --- >')
       }}>Switch to  Dark Mode</Button>
     </Footer>
   )
