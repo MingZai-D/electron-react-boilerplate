@@ -10,6 +10,7 @@ import { hex2Int, int2Hex } from "../../utils";
 import { flatMap } from "lodash";
 import { MappingKeyType } from "../../store/driver_config";
 import type { DescriptionsProps } from 'antd';
+import { getDriverFormatData } from "../../../nodeMapping/mapping";
 
 interface DriverDetailState {
   currentTabs: MappingKeyType
@@ -88,7 +89,7 @@ const DriverDetail = () =>{
   }
 
   const exportConfigFile = () =>{
-    const driverConfigFile = `0000${driverConfig.DriverType} ` + flatMap(driverConfig.Mappings).map(item => item.position + item.value.toString().padStart(item.length * 2, '0')).join(' ')
+    const driverConfigFile = getDriverFormatData(driverConfig).join(' ')
     window.electron.ipcRenderer.sendFileData('save-file',driverConfigFile)
     window.electron.ipcRenderer.on('save-file', async (res) =>{
       if (res.success && res.data) {

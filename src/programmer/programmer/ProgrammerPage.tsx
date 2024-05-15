@@ -6,7 +6,7 @@ import { Button, Descriptions, Upload } from 'antd'
 import type { DescriptionsProps } from 'antd';
 import { useReactive } from "ahooks";
 import { getDriverProgrammingInfo } from "../../utils";
-import { readConfiguration, readNFCAll } from "../../../nodeMapping/mapping";
+import { readConfiguration, writeNfcData } from "../../../nodeMapping/mapping";
 import { delay } from 'lodash'
 const { Dragger } = Upload
 
@@ -17,7 +17,7 @@ const ProgrammerPage = () =>{
     continueLoop: true,
     fileReady: false,
     startProgramming: false,
-    fileData: [] as string[],
+    fileData: '',
     driverType: '',
     success: 0,
     unSuccess: 0,
@@ -68,10 +68,10 @@ const ProgrammerPage = () =>{
     }
   }
 
-  const loopProgram = async (fileData: string[]) =>{
+  const loopProgram = async (fileData: string) =>{
     if(state.continueLoop) return 
-    const res = await readNFCAll()
-    if(res.status === 0){
+    const res = await writeNfcData(fileData)
+    if(res.success){
       state.configurationInfo = getDriverProgrammingInfo({ type : 'programming'})
       // readConfiguration(fileData).then((res) => {
       //   if (res?.status === 0) {
@@ -115,8 +115,8 @@ const ProgrammerPage = () =>{
                   window.electron.ipcRenderer.sendFilePath('upload-file', file.path)
                   window.electron.ipcRenderer.on('upload-file', async (res) =>{
                     if (res.success && res.data) {
-                      const data = res.data.split(' ')
-                      state.fileData = data
+                      console.log(res.data, '< --- fileData')
+                      state.fileData = res.data
                       state.fileReady = true
                     }
                   })

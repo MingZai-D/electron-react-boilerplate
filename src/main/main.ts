@@ -27,7 +27,9 @@ class AppUpdater {
 }
 
 let mainWindow: BrowserWindow | null = null;
-
+type VersionType = 'configurator' | 'programmer'
+let version:VersionType = 'configurator'
+console.log(JSON.stringify(process.argv), '< --- argv')
 function executeCommand(command: string, options: ExecOptions): Promise<{stdout: string, stderr: string}> {
   return new Promise((resolve, reject) => {
     exec(command, options, (error, stdout, stderr) => {
@@ -51,12 +53,10 @@ ipcMain.on('upload-file', async (event, filePath) => {
 
 ipcMain.on('run-exec', async (event, command) =>{
   const exePath = path.resolve('./')
-  console.log(exePath + "\\nodeMapping", '< --- exePath')
   try{
     const { stdout, stderr } = await executeCommand(command, {
       cwd: exePath + "\\nodeMapping"
     })
-    console.log(stderr, '< --- sterr')
     event.reply('run-exec', {
       success: true,
       data: stdout  
@@ -93,12 +93,11 @@ const installExtensions = async () => {
     )
     .catch(console.log);
 };
-
+console.log(process)
 const createWindow = async () => {
   if (isDebug) {
     await installExtensions();
   }
-
   const RESOURCES_PATH = app.isPackaged
     ? path.join(process.resourcesPath, 'assets')
     : path.join(__dirname, '../../assets');
@@ -114,6 +113,7 @@ const createWindow = async () => {
     icon: getAssetPath('logo.png'),
     autoHideMenuBar: true,
     webPreferences: {
+      // additionalArguments: 
       // 开启node
       nodeIntegration: true,
       // 取消上下文隔离

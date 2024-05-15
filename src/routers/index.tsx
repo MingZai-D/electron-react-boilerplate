@@ -13,6 +13,8 @@ export const RouterKey = {
 }
 
 export const AppRouters = () =>{
+  // const version = process.env;
+  // console.log(version, '< --- version')
   return (
     <Router>
       <Routes>

@@ -1,13 +1,19 @@
 import { difference, max, min, range } from 'lodash'
 import { DriverConfigType, MappingItem } from '../src/store/driver_config'
 import { hex2Int } from '../src/utils'
+import { ReadFileType } from '../src/main/preload'
 
 export const CloudURL = "https://ledvance365-my.sharepoint.com/personal/j_zheng4_ledvance_com/_layouts/15/onedrive.aspx?login_hint=j%2Ezheng4%40ledvance%2Ecom&view=1"
 export const Username = "J.Zheng4@Ledvance.com"
 export const Password = "Ledvance@2023"
 
-export const getDriverProgrammingInfo = (infoParams) => {
-  console.log(infoParams, '< --- infoParams')
+interface InfoParams {
+  type: 'waiting' | 'programming' | 'success' | 'failed' | 'wrong' | 'programmed'
+  driverName: string 
+  configName: string
+}
+
+export const getDriverProgrammingInfo = (infoParams: InfoParams) => {
   switch (infoParams.type) {
     case 'waiting':
       return {
@@ -50,7 +56,6 @@ export const getDriverProgrammingInfo = (infoParams) => {
       return
   }
 }
-
 
 export const readConfiguration = (configTags:string[]) => {
   const driverType = hex2Int(configTags[0].slice(4, 12))
@@ -103,7 +108,7 @@ export const getDriverFormatData = (driverConfig: DriverConfigType) =>{
   return makeContinuous(programData)
 }
 
-function makeContinuous(data:string[]) {
+const makeContinuous = (data:string[])=>{
   // 提取前两位数字并转换为整数
   const numbers = data.map(item => parseInt(item.slice(0, 2)));
   
@@ -128,13 +133,20 @@ function makeContinuous(data:string[]) {
 
   return data;
 }
-
-export const writeNfcData = async (driverData: string) =>{
+type WriteStatus = 0 | 1 | 2 | 404
+interface WriteNfcResult extends ReadFileType{
+  status: WriteStatus
+}
+type WriteNfcDataType = (driverData: string) => Promise<WriteNfcResult>
+export const writeNfcData:WriteNfcDataType = async (driverData) =>{
   const command = `CallNFC_EU.exe ${driverData}`
   return new Promise((resolve)=>{
     window.electron.ipcRenderer.sendExecCommand('run-exec', command)
     window.electron.ipcRenderer.on('run-exec', (res) =>{
-      resolve(res)
+      resolve({
+        ...res,
+        status: 0
+      })
     })
   })
 }

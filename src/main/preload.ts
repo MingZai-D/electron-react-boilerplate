@@ -3,7 +3,7 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
 export type Channels = 'upload-file' | 'save-file' | 'run-exec';
-type ReadFileType = {
+export type ReadFileType = {
   success: boolean
   data: string
 }
