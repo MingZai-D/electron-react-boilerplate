@@ -113,17 +113,17 @@ export const readConfiguration = (configTags:string[]) => {
   
 }
 
-function executeCommand(command:string, options: Record<any, any>) {
-  return new Promise((resolve, reject) => {
-    exec(command, options, (error, stdout, stderr) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve({ stdout, stderr });
-      }
-    });
-  });
-}
+// function executeCommand(command:string, options: Record<any, any>) {
+//   return new Promise((resolve, reject) => {
+//     exec(command, options, (error, stdout, stderr) => {
+//       if (error) {
+//         reject(error);
+//       } else {
+//         resolve({ stdout, stderr });
+//       }
+//     });
+//   });
+// }
 
 export const readNFCAll = async() => {
   window.electron.ipcRenderer.sendExecCommand('run-exec', 'callNFC.exe 000025')
@@ -190,11 +190,9 @@ export const getDriverFormatData = (driverConfig: DriverConfigType) =>{
 }
 
 export const writeNfcData = async (driverData: string) =>{
-  const exePath = path.resolve('./')
   const command = 'callNFC_EU.exe' + driverData
-  const option = {
-    cwd: exePath + "\\nodeMapping"
-  }
-  const res = await executeCommand(command, option)
-  console.log(res, '< --- res')
+  window.electron.ipcRenderer.sendExecCommand('run-exec', command)
+  window.electron.ipcRenderer.on('run-exec', (res) =>{
+    console.log(res, '< --- res')
+  })
 }
