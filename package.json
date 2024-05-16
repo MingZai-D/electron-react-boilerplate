@@ -39,14 +39,16 @@
     "build:product": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true VERSION=product webpack --config ./.erb/configs/webpack.config.renderer.dev.dll.ts",
     "build:main": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.main.prod.ts",
     "build:renderer": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.renderer.prod.ts",
-    "postinstall": "ts-node .erb/scripts/check-native-dep.js && electron-builder install-app-deps && npm run build:dll",
-    "package:p": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --publish never && npm run build:factory",
-    "package:c": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --publish never && npm run build:product",
+    "postinstall": "ts-node .erb/scripts/check-native-dep.js && electron-builder install-app-deps && npm run build:product",
+    "package:f": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --publish never && npm run build:factory",
+    "package:p": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --publish never && npm run build:product",
     "rebuild": "electron-rebuild --parallel --types prod,dev,optional --module-dir release/app",
     "f": "ts-node ./.erb/scripts/check-port-in-use.js && npm run start:factory",
     "p": "ts-node ./.erb/scripts/check-port-in-use.js && npm run start:product",
     "start:factory": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true VERSION=factory webpack serve --config ./.erb/configs/webpack.config.renderer.dev.ts",
-    "start:product": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true VERSION=product webpack serve --config ./.erb/configs/webpack.config.renderer.dev.ts"
+    "start:product": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true VERSION=product webpack serve --config ./.erb/configs/webpack.config.renderer.dev.ts",
+    "start:preload": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.preload.dev.ts",
+    "start:main": "cross-env NODE_ENV=development electronmon -r ts-node/register/transpile-only ."
   },
   "browserslist": [],
   "prettier": {
@@ -96,8 +98,6 @@
     }
   },
   "dependencies": {
-    "@reduxjs/toolkit": "^2.2.3",
-    "@types/lodash": "^4.17.0",
     "ahooks": "^3.7.11",
     "antd": "^5.16.2",
     "electron-debug": "^3.2.0",
@@ -127,6 +127,8 @@
     "@types/webpack-bundle-analyzer": "^4.6.0",
     "@typescript-eslint/eslint-plugin": "^6.7.0",
     "@typescript-eslint/parser": "^6.7.0",
+    "@reduxjs/toolkit": "^2.2.3",
+    "@types/lodash": "^4.17.1",
     "browserslist-config-erb": "^0.0.3",
     "chalk": "^4.1.2",
     "concurrently": "^8.2.1",
@@ -178,8 +180,8 @@
     "webpack-merge": "^5.9.0"
   },
   "build": {
-    "productName": "ElectronReact",
-    "appId": "org.erb.ElectronReact",
+    "productName": "nfc-pc-tool",
+    "appId": "org.erb.nfc-pc-tool",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
     "files": [

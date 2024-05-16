@@ -56,6 +56,12 @@
         flex-direction: column;
         .configuration_result_description{
           padding: 20px 40px;
+          display: flex;
+          align-items: self-end;
+          .configuration_result_download:hover{
+            color: #f60;
+            border-color: #f60;
+          }
         }
         .configuration_result_status{
           flex: 1;

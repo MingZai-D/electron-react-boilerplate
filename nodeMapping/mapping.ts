@@ -7,56 +7,6 @@ export const CloudURL = "https://ledvance365-my.sharepoint.com/personal/j_zheng4
 export const Username = "J.Zheng4@Ledvance.com"
 export const Password = "Ledvance@2023"
 
-interface InfoParams {
-  type: 'waiting' | 'programming' | 'success' | 'failed' | 'wrong' | 'programmed'
-  driverName: string 
-  configName: string
-}
-
-export const getDriverProgrammingInfo = (infoParams: InfoParams) => {
-  switch (infoParams.type) {
-    case 'waiting':
-      return {
-        title: "Waiting for LED Driver",
-        text: 'To start programming, put a Driver onto the NFC antenna.',
-        color: '#F2F2F2'
-      }
-    case 'programming':
-      return {
-        title: "Programming in progress",
-        text: 'Please leave the driver on the NFC antenna until programming is finished.',
-        color: '#333'
-      }
-    case 'success':
-      return {
-        title: "Driver programmed successfully",
-        text: 'To program a new driver, put the driver onto the NFC antenna.',
-        color: '#008000'
-      }
-    case 'failed':
-      return {
-        title: "Driver NOT programmed",
-        text: 'Programming process NOT successful.',
-        color: '#FF0000'
-      }
-    case 'wrong':
-      return {
-        title: "Wrong driver type",
-        text: 'Driver cannot be programmed.Please check driver type.',
-        subText: `Expected driver: ${infoParams.driverName}`,
-        color: '#F2F2F2'
-      }
-    case 'programmed':
-      return {
-        title: "Driver is already programmed",
-        text: `Driver is already programmed with ${infoParams.configName}`,
-        color: '#333'
-      }
-    default:
-      return
-  }
-}
-
 export const readConfiguration = (configTags:string[]) => {
   const driverType = hex2Int(configTags[0].slice(4, 12))
   // if (modeList[driverType]) {
@@ -99,9 +49,9 @@ export const getDriverFormatData = (driverConfig: DriverConfigType) =>{
       result += String(mapping.value).padStart(mapping.length * 2, '0')
       currentPosition = pos + mapping.length 
     })
-    if(currentPosition < 4){
-      result += 'XX'.repeat(4 - currentPosition)
-    }
+    // if(currentPosition < 4){
+    //   result += 'XX'.repeat(4 - currentPosition)
+    // }
     return result
   })
   const programData = [driverTypeHex, ...mapping]

@@ -24,13 +24,13 @@ export const getDriverProgrammingInfo = (infoParams: InformationType) => {
       return {
         title: "Programming in progress",
         text: 'Please leave the driver on the NFC antenna until programming is finished.',
-        color: '#333'
+        color: '#F2F2F2'
       }
     case 'success':
       return {
         title: "Driver programmed successfully",
         text: 'To program a new driver, put the driver onto the NFC antenna.',
-        color: '#008000'
+        color: '#C3F2CB'
       }
     case 'failed':
       return {
@@ -49,7 +49,7 @@ export const getDriverProgrammingInfo = (infoParams: InformationType) => {
       return {
         title: "Driver is already programmed",
         text: `Driver is already programmed with ${infoParams.configName}`,
-        color: '#333'
+        color: '#F2F2F2'
       }
     default:
       return

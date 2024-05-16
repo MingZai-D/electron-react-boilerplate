@@ -132,7 +132,7 @@ const createWindow = async () => {
   ipcMain.on('save-file', async (event, fileData) => {
     dialog.showSaveDialog(mainWindow as any, {
       title: 'Save File',
-      defaultPath: path.join(app.getPath('documents'), 'text-config.config')
+      defaultPath: path.join(app.getPath('documents'), 'driverConfig.config')
     }).then(result => {
       if (!result.canceled) {
         // 写入文件

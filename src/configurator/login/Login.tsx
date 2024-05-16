@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Form, Input } from "antd";
 import "./Login.scss"
-import loginImg from '../../../assets/icon.png'
+import loginImg from '../../../assets/login.png'
 import { MailOutlined} from '@ant-design/icons'
 import { RouterKey } from "../../routers";
 import { useReactive } from "ahooks";
