@@ -49,9 +49,9 @@ export const getDriverFormatData = (driverConfig: DriverConfigType) =>{
       result += String(mapping.value).padStart(mapping.length * 2, '0')
       currentPosition = pos + mapping.length 
     })
-    // if(currentPosition < 4){
-    //   result += 'XX'.repeat(4 - currentPosition)
-    // }
+    if(currentPosition < 4){
+      result += 'XX'.repeat(4 - currentPosition)
+    }
     return result
   })
   const programData = [driverTypeHex, ...mapping]

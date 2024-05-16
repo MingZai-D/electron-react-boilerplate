@@ -40,7 +40,7 @@ export const driverList = [
         {
           name: 'Manufacture_id',
           position: '0006',
-          value: '0x1189',
+          value: '1189',
           length: 2,
           type: 'number',
           disabled: true,
@@ -49,7 +49,7 @@ export const driverList = [
         {
           name: 'Image_Type',
           position: '0008',
-          value: '0xf3',
+          value: 'f5',
           length: 2,
           type: 'number',
           disabled: true,
@@ -109,7 +109,7 @@ export const driverList = [
         {
           name: 'AC Code',
           position: '001C',
-          value: 'NULL',
+          value: '0AC46372',
           length: 4,
           type: 'string',
           disabled: true,
@@ -185,7 +185,7 @@ export const driverList = [
         {
           name: 'Manufacture_id',
           position: '0006',
-          value: '0x1189',
+          value: '1189',
           length: 2,
           type: 'number',
           disabled: true,
@@ -194,7 +194,7 @@ export const driverList = [
         {
           name: 'Image_Type',
           position: '0008',
-          value: '0xf4',
+          value: 'f5',
           length: 2,
           type: 'number',
           disabled: true,
@@ -257,7 +257,7 @@ export const driverList = [
         {
           name: 'AC Code',
           position: '001C',
-          value: 'NULL',
+          value: '0AC46372',
           length: 4,
           type: 'string',
           disabled: true,
@@ -333,7 +333,7 @@ export const driverList = [
         {
           name: 'Manufacture_id',
           position: '0006',
-          value: '0x1189',
+          value: '1189',
           length: 2,
           type: 'number',
           disabled: true,
@@ -342,7 +342,7 @@ export const driverList = [
         {
           name: 'Image_Type',
           position: '0008',
-          value: '0xf5',
+          value: 'f5',
           length: 2,
           type: 'number',
           disabled: true,
@@ -405,7 +405,7 @@ export const driverList = [
         {
           name: 'AC Code',
           position: '001C',
-          value: 'NULL',
+          value: '0AC46372',
           length: 4,
           type: 'string',
           disabled: true,
@@ -490,7 +490,7 @@ export const defDriverConfig = {
       {
         name: 'Image_Type',
         position: '0008',
-        value: 'FFFF',
+        value: 'f5',
         length: 2,
         type: 'number',
         disabled: true,
