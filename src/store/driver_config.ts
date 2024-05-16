@@ -63,7 +63,6 @@ export const driverList = [
           type: 'number',
           disabled: true,
         },
-
         {
           name: 'Max Current',
           position: '000E',
@@ -72,7 +71,6 @@ export const driverList = [
           type: 'number',
           disabled: true,
         },
-
         {
           name: 'Min Voltage',
           position: '0010',
@@ -81,7 +79,6 @@ export const driverList = [
           type: 'number',
           disabled: true,
         },
-
         {
           name: 'Max Voltage',
           position: '0012',
@@ -468,6 +465,7 @@ export const driverList = [
 ];
 
 export const defDriverConfig = {
+  driverName: '',
   regionCode: '0x01',
   mappingType: '0x01',
   DriverType: 'FFFFFFFF',

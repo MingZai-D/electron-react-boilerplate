@@ -43,7 +43,9 @@
       flex-direction: column;
       background-color: #fff;
       .driver_info_img{
-        flex: 1
+        flex: 1;
+        display: flex;
+        justify-content: center;
       }
       .driver_detail_info{
         height: 100px;

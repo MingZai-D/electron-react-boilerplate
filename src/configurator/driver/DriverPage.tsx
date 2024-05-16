@@ -1,26 +1,25 @@
 import React from "react";
 import './scss/DriverPage.scss'
-import driverImg from '../../../assets/icon.png'
+import driverImg from '../../../assets/driver_defalut.png'
 import { Button, Input, Table } from "antd";
 import type { TableProps } from 'antd';
 import { useNavigate } from "react-router-dom";
 import { RouterKey } from "../../routers";
 import DriverHeader from "../../components/DriverHeader/DriverHeader";
-import { driverList } from "../../store/driver_config";
 import { useCreation, useReactive } from "ahooks";
+import { DriverItemType, useDriverList } from "../../store/reducer";
 
-interface DataType {
+interface DataType extends DriverItemType{
   key: string;
-  name: string;
-  driverCode: number
 }
 
 const DriverPage = () =>{
   const navigate = useNavigate()
+  const [driverList, setDriverConfig] = useDriverList()
   const defFormData = useCreation(() =>{
     return driverList.map(driver =>({
       ...driver,
-      key: driver.name
+      key: driver.driverName
     }))
   }, [driverList])
 
@@ -32,18 +31,18 @@ const DriverPage = () =>{
   const columns: TableProps<DataType>['columns'] = [
     {
       title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'driverName',
+      key: 'driverName',
       render: (text) => <a>{text}</a>,
     },
     {
       title: 'GTN',
-      dataIndex: 'GTN',
+      dataIndex: 'driverType',
       key: 'GTN',
     },
     {
       title: 'DriverCode',
-      dataIndex: 'driverCode',
+      dataIndex: 'regionCode',
       key: 'driverCode',
     }
   ];
@@ -57,7 +56,7 @@ const DriverPage = () =>{
           <div className="driver_table">
             <Input.Search 
               onSearch={(v) => {
-                state.formData = defFormData.filter(item => item.name.includes(v))
+                state.formData = defFormData.filter(item => item.driverName.includes(v))
               }} size="large" className="driver_input"/>
             <Table 
               style={{height: 'calc(100% - 60px)', overflowY: 'auto'}}
@@ -69,25 +68,26 @@ const DriverPage = () =>{
               onRow={(record) =>{
                 return {
                   onClick: () => {
-                    state.currentDriver = record as any
+                    state.currentDriver = record
+                    setDriverConfig(record)
                   }
                 }
               }}
               rowClassName={(record) => {
-                return `driver_table_row ${record.driverCode === state.currentDriver.driverCode ? 'driver_table_row_active' : ''}`
+                return `driver_table_row ${record.driverName === state.currentDriver.driverName ? 'driver_table_row_active' : ''}`
               }}
             />
           </div>
         </div>
         <div className="driver_detail">
-          <div className="driver_header">{state.currentDriver.name}</div>
+          <div className="driver_header">{state.currentDriver.driverName}</div>
           <div className="driver_info_img">
-            {/* <img src={driverImg} width="100%"/> */}
+            <img src={driverImg} height="100%"/>
           </div>
           <div className="driver_detail_info">
-            <p>{state.currentDriver.name}</p>
-            <p>{state.currentDriver.GTN}</p>
-            <p>{state.currentDriver.driverCode}</p>
+            <p>{state.currentDriver.driverName}</p>
+            <p>{state.currentDriver.driverType}</p>
+            <p>{state.currentDriver.regionCode}</p>
           </div>
         </div>
       </div>

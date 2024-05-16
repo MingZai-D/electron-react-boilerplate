@@ -19,7 +19,7 @@ import { ExecOptions, exec } from 'child_process';
 
 
 class AppUpdater {
-  constructor() {
+  constructor() { 
     log.transports.file.level = 'info';
     autoUpdater.logger = log;
     autoUpdater.checkForUpdatesAndNotify();

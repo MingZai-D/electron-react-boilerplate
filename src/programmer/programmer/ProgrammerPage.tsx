@@ -138,7 +138,7 @@ const ProgrammerPage = () =>{
                 labelStyle={{width: '60%', color: '#000'}}
                 contentStyle={{ width: '40%'}}
               />
-              <Button 
+              {/* <Button 
                 size="large" 
                 shape="circle" 
                 className="configuration_result_download" 
@@ -146,7 +146,7 @@ const ProgrammerPage = () =>{
                 onClick={() =>{
                   
                 }}
-              />
+              /> */}
             </div>
             <div className="configuration_result_status">
               <div className="configuration_result_status_content" style={{background: state.configurationInfo?.color || '#F2F2F2'}}>
