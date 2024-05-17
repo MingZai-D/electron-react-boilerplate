@@ -1,5 +1,5 @@
 {
-  "description": "A foundation for scalable desktop apps",
+  "description": "A nfc desktop apps",
   "keywords": [
     "electron",
     "boilerplate",
@@ -11,42 +11,27 @@
     "hot",
     "reload"
   ],
-  "homepage": "https://github.com/electron-react-boilerplate/electron-react-boilerplate#readme",
-  "bugs": {
-    "url": "https://github.com/electron-react-boilerplate/electron-react-boilerplate/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/electron-react-boilerplate/electron-react-boilerplate.git"
-  },
   "license": "MIT",
-  "author": {
-    "name": "Electron React Boilerplate Maintainers",
-    "email": "electronreactboilerplate@gmail.com",
-    "url": "https://electron-react-boilerplate.js.org"
-  },
-  "contributors": [
-    {
-      "name": "Amila Welihinda",
-      "email": "amilajack@gmail.com",
-      "url": "https://github.com/amilajack"
-    }
-  ],
   "main": "./src/main/main.ts",
   "scripts": {
     "build": "concurrently \"npm run build:main\" \"npm run build:renderer\"",
-    "build:factory": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true VERSION=factory  webpack --config ./.erb/configs/webpack.config.renderer.dev.dll.ts",
-    "build:product": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true VERSION=product webpack --config ./.erb/configs/webpack.config.renderer.dev.dll.ts",
+    "build:p": "concurrently \"npm run build:main:p\" \"npm run build:Programmer\"",
+    "build:c": "concurrently \"npm run build:main:c\" \"npm run build:Configurator\"",
+    "build:main:p": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true VERSION=Programmer webpack --config ./.erb/configs/webpack.config.main.prod.ts",
+    "build:main:c": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true VERSION=Configurator webpack --config ./.erb/configs/webpack.config.main.prod.ts",
+    "build:dll": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.renderer.dev.dll.ts",
+    "build:Programmer": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true VERSION=Programmer  webpack --config ./.erb/configs/webpack.config.renderer.prod.ts",
+    "build:Configurator": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true VERSION=Configurator webpack --config ./.erb/configs/webpack.config.renderer.prod.ts",
     "build:main": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.main.prod.ts",
     "build:renderer": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.renderer.prod.ts",
-    "postinstall": "ts-node .erb/scripts/check-native-dep.js && electron-builder install-app-deps && npm run build:product",
-    "package:f": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --publish never && npm run build:factory",
-    "package:p": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --publish never && npm run build:product",
+    "postinstall": "ts-node .erb/scripts/check-native-dep.js && electron-builder install-app-deps && npm run build:dll",
+    "package:f": "cross-env VERSION=Programmer ts-node ./.erb/scripts/clean.js dist && npm run build:p && electron-builder build --publish never && npm run build:Programmer",
+    "package:p": "cross-env VERSION=Configurator ts-node ./.erb/scripts/clean.js dist && npm run build:c && electron-builder build --publish never && npm run build:Configurator",
     "rebuild": "electron-rebuild --parallel --types prod,dev,optional --module-dir release/app",
     "f": "ts-node ./.erb/scripts/check-port-in-use.js && npm run start:factory",
     "p": "ts-node ./.erb/scripts/check-port-in-use.js && npm run start:product",
-    "start:factory": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true VERSION=factory webpack serve --config ./.erb/configs/webpack.config.renderer.dev.ts",
-    "start:product": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true VERSION=product webpack serve --config ./.erb/configs/webpack.config.renderer.dev.ts",
+    "start:factory": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true VERSION=Programmer webpack serve --config ./.erb/configs/webpack.config.renderer.dev.ts",
+    "start:product": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true VERSION=Configurator webpack serve --config ./.erb/configs/webpack.config.renderer.dev.ts",
     "start:preload": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.preload.dev.ts",
     "start:main": "cross-env NODE_ENV=development electronmon -r ts-node/register/transpile-only ."
   },
@@ -180,7 +165,7 @@
     "webpack-merge": "^5.9.0"
   },
   "build": {
-    "productName": "nfc-pc-tool",
+    "productName": "Programmer",
     "appId": "org.erb.nfc-pc-tool",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",

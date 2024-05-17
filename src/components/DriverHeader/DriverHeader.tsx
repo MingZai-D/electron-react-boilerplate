@@ -1,20 +1,20 @@
-import React from "react";
-import { Layout } from "antd";
-const { Header } = Layout
-import logo from '../../../assets/logo.png'
-import './DriverHeader.scss'
+import React from 'react';
+import { Layout } from 'antd';
+const { Header } = Layout;
+import logo from '../../../assets/logo.png';
+import './DriverHeader.scss';
 
 interface DriverHeaderProps {
-  isProgrammer?: boolean
+  isProgrammer?: boolean;
 }
 
-const DriverHeader = ({isProgrammer}: DriverHeaderProps) =>{
+const DriverHeader = ({ isProgrammer }: DriverHeaderProps) => {
   return (
     <Header className="LDE_driver_header">
-      <img src={logo} style={{width: '40px', marginRight: '20px'}}/>
-      {isProgrammer ? 'LEDVANCE Configurator' : 'LEDVANCE Programmer'}
+      <img src={logo} style={{ width: '40px', marginRight: '20px' }} />
+      {isProgrammer ? 'LEDVANCE Programmer' : 'LEDVANCE Configurator'}
     </Header>
-  )
-}
+  );
+};
 
-export default DriverHeader
+export default DriverHeader;

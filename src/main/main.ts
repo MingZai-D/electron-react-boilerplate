@@ -27,8 +27,8 @@ class AppUpdater {
 }
 
 let mainWindow: BrowserWindow | null = null;
-export type VersionType = 'product' | 'factory'
-let version:VersionType = 'product'
+export type VersionType = 'Configurator' | 'Programmer'
+let version:VersionType = 'Configurator'
 
 function executeCommand(command: string, options: ExecOptions): Promise<{stdout: string, stderr: string}> {
   return new Promise((resolve, reject) => {
@@ -69,9 +69,7 @@ ipcMain.on('run-exec', async (event, command) =>{
   }
 })
 
-ipcMain.once('message', async (event) => {
-  event.reply('message', process.env.VERSION || version)
-});
+
 
 
 if (process.env.NODE_ENV === 'production') {
@@ -116,6 +114,7 @@ const createWindow = async () => {
     width: 1024, 
     height: 750,
     icon: getAssetPath('logo.png'),
+    title: process.env.VERSION === 'Programmer' ? 'LEDVANCE Programmer' : 'LEDVANCE Configurator',
     autoHideMenuBar: true,
     webPreferences: {
       // additionalArguments: 
@@ -147,8 +146,19 @@ const createWindow = async () => {
     });
   });
 
+  // 监听渲染进程发来的消息，打开开发者工具
+  ipcMain.on('open-devtools', () => {
+    if(mainWindow){
+      mainWindow.webContents.openDevTools();
+    }
+  });
 
-
+  ipcMain.once('message', async (event) => {
+    event.reply('message', {
+      success: true,
+      data: process.env.VERSION,
+    })
+  });
   mainWindow.loadURL(resolveHtmlPath('index.html'));
 
 
@@ -197,7 +207,6 @@ app
   .whenReady()
   .then(() => {
     createWindow();
-    
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the
       // dock icon is clicked and there are no other windows open.

@@ -47,12 +47,12 @@ const ProgrammerPage = () =>{
       {
         key: '3',
         label: 'Successfully Programmed',
-        children: state.success,
+        children: <span style={{color: '#4CD964'}}>{state.success}</span>,
       },
       {
         key: '4',
         label: 'Unsuccessfully Programmed',
-        children: state.unSuccess,
+        children: <span style={{color: '#B07C40'}}>{state.unSuccess}</span>,
       },
     ]
   }, [state.configurationInfo, state.success, state.unSuccess, state.fileName])
@@ -135,7 +135,7 @@ const ProgrammerPage = () =>{
                 items={items} 
                 column={1} 
                 colon={false}
-                labelStyle={{width: '60%', color: '#000'}}
+                labelStyle={{width: '60%', color: '#000', fontFamily: 'Arial'}}
                 contentStyle={{ width: '40%'}}
               />
               {/* <Button 

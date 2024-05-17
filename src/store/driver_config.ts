@@ -2,30 +2,14 @@ export const accountInfo = [
   { email: 'admin@ledvance.com', password: 'Ledvance@2024' },
 ];
 
-// export const driverList = [
-//   {
-//     driverCode: 1,
-//     name: "DR ZB P 30W 220 240V 0A7",
-//     GTN:'GTN1'
-//   },
-//   {
-//     driverCode: 2,
-//     name: "DR ZB P 45W 220 240V 1A2",
-//     GTN:'GTN2'
-//   },
-//   {
-//     driverCode: 3,
-//     name: "DR ZB P 50W 220 240V 1A2",
-//     GTN:'GTN3'
-//   },
-// ]
-
 export const driverList = [
   {
     driverName: 'DR ZB P 30W 220 240V 0A7',
     regionCode: '0x01',
     mappingType: '0x01',
     DriverType: 'FFFFFFFF',
+    GTN: '',
+    ACCode: '',
     Mappings: {
       'Driver information': [
         {
@@ -40,19 +24,21 @@ export const driverList = [
         {
           name: 'Manufacture_id',
           position: '0006',
-          value: '1189',
+          value: '0x1189',
           length: 2,
-          type: 'number',
+          type: 'string',
           disabled: true,
+          isHex: true
         },
 
         {
           name: 'Image_Type',
           position: '0008',
-          value: 'f5',
+          value: '0xf3',
           length: 2,
-          type: 'number',
+          type: 'string',
           disabled: true,
+          isHex: true
         },
 
         {
@@ -109,7 +95,7 @@ export const driverList = [
         {
           name: 'AC Code',
           position: '001C',
-          value: '0AC46372',
+          value: '',
           length: 4,
           type: 'string',
           disabled: true,
@@ -118,14 +104,14 @@ export const driverList = [
       CurrentSetting: [
         {
           name: 'Set Current',
-          value: 50,
+          value: 200,
           position: '0020',
           length: 2,
           type: 'number',
           coefficient: 0.1,
-          min: 10,
-          max: 32,
-          unit: 'A',
+          min: 200,
+          max: 750,
+          unit: 'mA',
         },
         {
           name: 'Set Power',
@@ -134,34 +120,39 @@ export const driverList = [
           length: 2,
           type: 'number',
           coefficient: 0.01,
-          min: 1,
-          max: 100,
-          unit: 'w',
+          min: 20,
+          max: 310,
+          unit: '*0.1w',
         },
         {
           name: 'Set Voltage',
-          value: 50,
+          value: 100,
           position: '0024',
           length: 2,
           type: 'number',
-          min: 1,
-          max: 100,
+          min: 100,
+          max: 490,
+          unit:'*0.1v',
         },
       ],
       'Luminaire Information': [
         {
           name: 'Emergency lighting levelPWM1',
-          value: 'FF',
+          value: 48,
           position: '0026',
           length: 1,
-          type: 'string',
+          type: 'number',
+          min: 1,
+          max: 128,
         },
         {
           name: 'Emergency lighting levelPWM2',
-          value: 'FF',
+          value: 48,
           position: '0027',
           length: 1,
-          type: 'string',
+          type: 'number',
+          min: 1,
+          max: 128,
         },
       ],
     },
@@ -171,6 +162,8 @@ export const driverList = [
     regionCode: '0x01',
     mappingType: '0x01',
     DriverType: 'FFFFFFFF',
+    GTN: '',
+    ACCode: '',
     Mappings: {
       'Driver information': [
         {
@@ -185,19 +178,21 @@ export const driverList = [
         {
           name: 'Manufacture_id',
           position: '0006',
-          value: '1189',
+          value: '0x1189',
           length: 2,
-          type: 'number',
+          type: 'string',
           disabled: true,
+          isHex: true
         },
 
         {
           name: 'Image_Type',
           position: '0008',
-          value: 'f5',
+          value: '0xf4',
           length: 2,
-          type: 'number',
+          type: 'string',
           disabled: true,
+          isHex: true
         },
 
         {
@@ -257,7 +252,7 @@ export const driverList = [
         {
           name: 'AC Code',
           position: '001C',
-          value: '0AC46372',
+          value: '',
           length: 4,
           type: 'string',
           disabled: true,
@@ -266,50 +261,55 @@ export const driverList = [
       CurrentSetting: [
         {
           name: 'Set Current',
-          value: 50,
+          value: 600,
           position: '0020',
           length: 2,
           type: 'number',
           coefficient: 0.1,
-          min: 10,
-          max: 32,
-          unit: 'A',
+          min: 600,
+          max: 1200,
+          unit: 'mA',
         },
         {
           name: 'Set Power',
-          value: 50,
+          value: 60,
           position: '0022',
           length: 2,
           type: 'number',
           coefficient: 0.01,
-          min: 1,
-          max: 100,
-          unit: 'w',
+          min: 60,
+          max: 450,
+          unit: '*0.1w',
         },
         {
           name: 'Set Voltage',
-          value: 50,
+          value: 100,
           position: '0024',
           length: 2,
           type: 'number',
-          min: 1,
-          max: 100,
+          min: 100,
+          max: 490,
+          unit: '*0.1v',
         },
       ],
       'Luminaire Information': [
         {
           name: 'Emergency lighting levelPWM1',
-          value: 'FF',
+          value: 48,
           position: '0026',
           length: 1,
-          type: 'string',
+          type: 'number',
+          min: 1,
+          max: 128,
         },
         {
           name: 'Emergency lighting levelPWM2',
-          value: 'FF',
+          value: 48,
           position: '0027',
           length: 1,
-          type: 'string',
+          type: 'number',
+          min: 1,
+          max: 128,
         },
       ],
     },
@@ -319,6 +319,8 @@ export const driverList = [
     regionCode: '0x01',
     mappingType: '0x01',
     DriverType: 'FFFFFFFF',
+    GTN: '',
+    ACCode: '',
     Mappings: {
       'Driver information': [
         {
@@ -333,19 +335,21 @@ export const driverList = [
         {
           name: 'Manufacture_id',
           position: '0006',
-          value: '1189',
+          value: '0x1189',
           length: 2,
-          type: 'number',
+          type: 'string',
           disabled: true,
+          isHex: true
         },
 
         {
           name: 'Image_Type',
           position: '0008',
-          value: 'f5',
+          value: '0xf5',
           length: 2,
-          type: 'number',
+          type: 'string',
           disabled: true,
+          isHex: true,
         },
 
         {
@@ -405,7 +409,7 @@ export const driverList = [
         {
           name: 'AC Code',
           position: '001C',
-          value: '0AC46372',
+          value: '',
           length: 4,
           type: 'string',
           disabled: true,
@@ -414,14 +418,14 @@ export const driverList = [
       CurrentSetting: [
         {
           name: 'Set Current',
-          value: 50,
+          value: 200,
           position: '0020',
           length: 2,
           type: 'number',
           coefficient: 0.1,
-          min: 10,
-          max: 32,
-          unit: 'A',
+          min: 200,
+          max: 1200,
+          unit: 'mA',
         },
         {
           name: 'Set Power',
@@ -430,34 +434,39 @@ export const driverList = [
           length: 2,
           type: 'number',
           coefficient: 0.01,
-          min: 1,
-          max: 100,
-          unit: 'w',
+          min: 40,
+          max: 520,
+          unit: '*0.1w',
         },
         {
           name: 'Set Voltage',
-          value: 50,
+          value: 200,
           position: '0024',
           length: 2,
           type: 'number',
-          min: 1,
-          max: 100,
+          min: 200,
+          max: 520,
+          unit: '*0.1v',
         },
       ],
       'Luminaire Information': [
         {
           name: 'Emergency lighting levelPWM1',
-          value: 'FF',
+          value: 48,
           position: '0026',
           length: 1,
-          type: 'string',
+          type: 'number',
+          min: 1,
+          max: 128,
         },
         {
           name: 'Emergency lighting levelPWM2',
-          value: 'FF',
+          value: 48,
           position: '0027',
           length: 1,
-          type: 'string',
+          type: 'number',
+          min: 1,
+          max: 128,
         },
       ],
     },
@@ -469,6 +478,8 @@ export const defDriverConfig = {
   regionCode: '0x01',
   mappingType: '0x01',
   DriverType: 'FFFFFFFF',
+  GTN: '',
+  ACCode: '',
   Mappings: {
     'Driver information': [
       {
@@ -486,6 +497,7 @@ export const defDriverConfig = {
         length: 2,
         type: 'number',
         disabled: true,
+        
       },
       {
         name: 'Image_Type',
@@ -546,7 +558,7 @@ export const defDriverConfig = {
       {
         name: 'AC Code',
         position: '001C',
-        value: '0AC46372',
+        value: '',
         length: 4,
         type: 'string',
         disabled: true,
@@ -619,4 +631,5 @@ export interface MappingItem {
   max?: number;
   unit?: string;
   coefficient?: number;
+  isHex?: boolean
 }

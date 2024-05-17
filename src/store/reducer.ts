@@ -10,12 +10,14 @@ export interface DriverItemType {
   driverType: string;
   regionCode: string;
   mappingType: string;
+  GTN: string
+  Code: string
 }
-
 
 const initialState = {
   driverList,
   driverConfig: driverList[0],
+  isProgrammer: false,
 };
 
 export const driverConfig = createSlice({
@@ -26,6 +28,10 @@ export const driverConfig = createSlice({
       state.driverConfig = {
         ...action.payload,
       };
+      return state;
+    },
+    updateVersion(state, action) {
+      state.isProgrammer = action.payload;
       return state;
     },
   },
@@ -58,26 +64,47 @@ export const useDriverTabs = () => {
   return driverTabs;
 };
 
-
-export const useDriverList = (): [DriverItemType[], (driver: DriverItemType) => void] => {
+export const useDriverList = (): [
+  DriverItemType[],
+  (driver: DriverItemType) => void,
+] => {
   const driverList = useSelector(
     (store: any) => store.driverConfig?.driverList,
   );
-  const dispatch = useDispatch()
-  const driverForm = useMemo(() =>(driverList.map((driver: DriverConfigType) => ({
-    driverName: driver.driverName,
-    img: '',
-    driverType: driver.DriverType,
-    regionCode: driver.regionCode,
-    mappingType: driver.mappingType,
-  }))), driverList)
+  const dispatch = useDispatch();
+  const driverForm = useMemo(
+    () =>
+      driverList.map((driver: DriverConfigType) => ({
+        driverName: driver.driverName,
+        img: '',
+        driverType: driver.DriverType,
+        regionCode: driver.regionCode,
+        mappingType: driver.mappingType,
+        GTN: driver.GTN,
+        Code: driver.ACCode
+      })),
+    driverList,
+  );
 
-  const setDriverConfig = (driver: DriverItemType) =>{
-    const curDriver = driverList.find((d: DriverConfigType) => d.driverName === driver.driverName)
+  const setDriverConfig = (driver: DriverItemType) => {
+    const curDriver = driverList.find(
+      (d: DriverConfigType) => d.driverName === driver.driverName,
+    );
     dispatch(updateDriverConfig(curDriver));
-  }
-  return [driverForm, setDriverConfig]
+  };
+  return [driverForm, setDriverConfig];
 };
 
-export const { updateDriverConfig } = driverConfig.actions;
+export const useNfcVersion = (): [boolean, (v: boolean) => void] => {
+  const isProgrammer = useSelector(
+    (store: any) => store.driverConfig?.isProgrammer,
+  );
+  const dispatch = useDispatch();
+  const setNfcVersion = (v: boolean) => {
+    dispatch(updateVersion(v));
+  };
+  return [isProgrammer, setNfcVersion];
+};
+
+export const { updateDriverConfig, updateVersion } = driverConfig.actions;
 export default driverConfig.reducer;

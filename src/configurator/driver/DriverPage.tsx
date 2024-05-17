@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { RouterKey } from "../../routers";
 import DriverHeader from "../../components/DriverHeader/DriverHeader";
 import { useCreation, useReactive } from "ahooks";
-import { DriverItemType, useDriverList } from "../../store/reducer";
+import { DriverItemType, useDriverList, useNfcVersion } from "../../store/reducer";
 
 interface DataType extends DriverItemType{
   key: string;
@@ -16,6 +16,7 @@ interface DataType extends DriverItemType{
 const DriverPage = () =>{
   const navigate = useNavigate()
   const [driverList, setDriverConfig] = useDriverList()
+  const [isProgrammer] = useNfcVersion()
   const defFormData = useCreation(() =>{
     return driverList.map(driver =>({
       ...driver,
@@ -37,19 +38,19 @@ const DriverPage = () =>{
     },
     {
       title: 'GTN',
-      dataIndex: 'driverType',
+      dataIndex: 'GTN',
       key: 'GTN',
     },
     {
-      title: 'DriverCode',
-      dataIndex: 'regionCode',
+      title: 'Code',
+      dataIndex: 'ACCode',
       key: 'driverCode',
     }
   ];
   
   return (
     <div className="driver_page">
-      <DriverHeader />
+      {/* <DriverHeader isProgrammer={isProgrammer}/> */}
       <div className="driver_content">
         <div className="driver_container">
           <div className="driver_header">LEDVANCE NFC Drivers</div>
@@ -57,12 +58,12 @@ const DriverPage = () =>{
             <Input.Search 
               onSearch={(v) => {
                 state.formData = defFormData.filter(item => item.driverName.includes(v))
-              }} size="large" className="driver_input"/>
+              }} size="large" className="driver_input" style={{marginBottom: '25px'}}/>
             <Table 
-              style={{height: 'calc(100% - 60px)', overflowY: 'auto'}}
+              style={{height: 'calc(100% - 75px)', overflowY: 'auto'}}
               columns={columns}
               dataSource={state.formData}
-              showHeader={false}
+              // showHeader={false}
               pagination={false}
               bordered={false}
               onRow={(record) =>{
@@ -86,8 +87,8 @@ const DriverPage = () =>{
           </div>
           <div className="driver_detail_info">
             <p>{state.currentDriver.driverName}</p>
-            <p>{state.currentDriver.driverType}</p>
-            <p>{state.currentDriver.regionCode}</p>
+            <p>{state.currentDriver.GTN}</p>
+            <p>{state.currentDriver.Code}</p>
           </div>
         </div>
       </div>

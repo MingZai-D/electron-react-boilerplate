@@ -4,10 +4,8 @@ import { Button, Descriptions, Form, Input, InputNumber, Radio } from "antd";
 import { HomeOutlined, FileOutlined } from "@ant-design/icons"
 import { useNavigate } from "react-router-dom";
 import DriverHeader from "../../components/DriverHeader/DriverHeader";
-import { useDriverConfig, useDriverTabs } from "../../store/reducer";
+import { useDriverConfig, useDriverTabs, useNfcVersion } from "../../store/reducer";
 import { useReactive, useUpdateEffect } from "ahooks";
-import { hex2Int, int2Hex } from "../../utils";
-import { flatMap } from "lodash";
 import { MappingKeyType } from "../../store/driver_config";
 import type { DescriptionsProps } from 'antd';
 import { getDriverFormatData } from "../../../nodeMapping/mapping";
@@ -22,6 +20,7 @@ interface DriverDetailState {
 const DriverDetail = () =>{
   const navigate = useNavigate()
   const [driverConfig, setDriverConfig] = useDriverConfig()
+  const [isProgrammer] = useNfcVersion()
   const driverTabs = useDriverTabs()
   const [form] = Form.useForm()
 
@@ -37,7 +36,7 @@ const DriverDetail = () =>{
       return {
         key: idx.toString(),
         label: item.name,
-        children: hex2Int(item.value.toString())
+        children: item.value
       }
     })
   }, [driverConfig])
@@ -47,7 +46,7 @@ const DriverDetail = () =>{
       return {
         key: idx.toString(),
         label: item.name,
-        children: hex2Int(item.value.toString())
+        children: item.value
       }
     })
   }, [driverConfig])
@@ -56,7 +55,7 @@ const DriverDetail = () =>{
     if(state.currentTabs){
       state.currentFormItem = driverConfig.Mappings[state.currentTabs]
       state.formInitState = driverConfig.Mappings[state.currentTabs].reduce((pre: Record<string, any>, cur)=>{
-        pre[cur.name] = typeof cur.value === 'boolean' ? cur.value : cur.value !== undefined ? hex2Int(cur.value?.toString()) : cur.value
+        pre[cur.name] = cur.value
         return pre
       }, {})
     }
@@ -66,12 +65,13 @@ const DriverDetail = () =>{
     form.setFieldsValue(state.formInitState)
   }, [state.formInitState])
 
+
   const updateDriverConfig = (v:any) =>{
     const newFormItem = state.currentFormItem.map((item:any) =>{
       if(item.name === Object.keys(v)[0]){
         return{
           ...item,
-          value: typeof Object.values(v)[0] === 'boolean' ? Object.values(v)[0] : int2Hex(Number(Object.values(v)[0]))
+          value: Object.values(v)[0]
         }
       }
       return item
@@ -100,7 +100,7 @@ const DriverDetail = () =>{
 
   return (
     <div className="driver_detail_page">
-      <DriverHeader />
+      {/* <DriverHeader isProgrammer={isProgrammer}/> */}
       <div className="driver_header">
         <div className="driver_icons_wrap">
           <div 
@@ -136,8 +136,8 @@ const DriverDetail = () =>{
               <Form
                 layout="inline"
                 initialValues={{
-                  "Driver AC Code": '0026',
-                  "Description": hex2Int('2222')
+                  "Driver AC Code": '',
+                  "Description": ''
                 }}
                 disabled={true}
               >
@@ -198,7 +198,7 @@ const DriverDetail = () =>{
                             <Radio value={false}>false</Radio>
                             </Radio.Group> : 
                             (item.type === 'number' ? 
-                              <InputNumber min={item.min !== undefined ? hex2Int(item.min) : undefined} max={item.max !== undefined ? hex2Int(item.max) : undefined} disabled={item.disabled} suffix={item.unit}/> : 
+                              <InputNumber min={item.min} max={item.max} disabled={item.disabled} suffix={item.unit}/> : 
                               <Input disabled={item.disabled}/>
                             )
                           }

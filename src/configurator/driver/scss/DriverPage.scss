@@ -6,7 +6,7 @@
   flex-direction: column;
   .driver_content{
     display: flex;
-    height: calc(100% - 140px);
+    flex: 1;
     .driver_header{
       height: 50px;
       line-height: 50px;

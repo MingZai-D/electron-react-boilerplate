@@ -1,6 +1,6 @@
 import { difference, max, min, range } from 'lodash'
 import { DriverConfigType, MappingItem } from '../src/store/driver_config'
-import { hex2Int } from '../src/utils'
+import { decimalToLittleEndianHex, hex2Int } from '../src/utils'
 import { ReadFileType } from '../src/main/preload'
 
 export const CloudURL = "https://ledvance365-my.sharepoint.com/personal/j_zheng4_ledvance_com/_layouts/15/onedrive.aspx?login_hint=j%2Ezheng4%40ledvance%2Ecom&view=1"
@@ -26,8 +26,7 @@ interface DriverGroup {
 }
 
 export const getDriverFormatData = (driverConfig: DriverConfigType) =>{
-  const driverTypeHex = '00' + driverConfig.DriverType
-  const driverMapping = Object.values(driverConfig.Mappings).flat()
+  const driverMapping = Object.values(driverConfig.Mappings).flat().filter((driver:MappingItem) => !driver?.disabled)
   const driverGroup:DriverGroup  = {}
   driverMapping.forEach(item =>{
     const idx = Math.floor(hex2Int(item.position) / 4)
@@ -46,7 +45,8 @@ export const getDriverFormatData = (driverConfig: DriverConfigType) =>{
       if(diff > 0){
         result += 'XX'.repeat(diff)
       }
-      result += String(mapping.value).padStart(mapping.length * 2, '0')
+      const v = removeHexPrefix(String(mapping.value)).padStart(mapping.length * 2, '0')
+      result += decimalToLittleEndianHex(v, mapping.length, mapping.isHex).padStart(mapping.length * 2, '0')
       currentPosition = pos + mapping.length 
     })
     if(currentPosition < 4){
@@ -54,8 +54,17 @@ export const getDriverFormatData = (driverConfig: DriverConfigType) =>{
     }
     return result
   })
-  const programData = [driverTypeHex, ...mapping]
+  const programData = [...mapping]
   return makeContinuous(programData)
+}
+
+function removeHexPrefix(hexStr:string) {
+  // 如果字符串以 '0x' 开头，返回去除了前缀的字符串
+  if (hexStr.startsWith('0x')) {
+    return hexStr.slice(2);
+  }
+  // 如果字符串不以 '0x' 开头，返回原始字符串
+  return hexStr;
 }
 
 const makeContinuous = (data:string[])=>{
@@ -90,6 +99,7 @@ interface WriteNfcResult extends ReadFileType{
 type WriteNfcDataType = (driverData: string) => Promise<WriteNfcResult>
 export const writeNfcData:WriteNfcDataType = async (driverData) =>{
   const command = `CallNFC_EU.exe ${driverData}`
+  console.log(command, '< --- command')
   return new Promise((resolve)=>{
     window.electron.ipcRenderer.sendExecCommand('run-exec', command)
     window.electron.ipcRenderer.on('run-exec', (res) =>{
